@@ -4,6 +4,7 @@ var http = require('http');
 var mysql = require('mysql');
 // require fs
 var fs = require('fs');
+var parentPage = require(__dirname+'/page.js');
 // require config file
 var config = require(__dirname+'/config.js');
 
@@ -32,6 +33,7 @@ module.exports = function(){
         // create server usinng http module
         http.createServer(function (req, res)
         {
+            self.req = req; self.res = res;
             // explode url by slash(/)
             var splits = req.url.split('/').reverse();
 
@@ -48,20 +50,11 @@ module.exports = function(){
             {
                 fileUrl = self.pgDir+'/'+defaultPg+'.js';
             }
-        
+            
+            self.fs = fs;
             var page = require(fileUrl);
-            page.render.call(self);
-        
-            self.db.query('select * from movie order by movie_id desc limit 1', function(err, rows) 
-            {
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                for(var i = 0; i < rows.length;i++)
-                {
-                    res.write('<h1>'+rows[i].movie_title+'</h1>');
-                    res.write('<img src="'+rows[i].movie_cover+'" />');
-                }
-                res.end();
-            });
+            // render page
+            page.render.call(parentPage.call(self));
 
         }).listen(this.port, 'localhost');
 
