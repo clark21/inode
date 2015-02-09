@@ -23,6 +23,12 @@ module.exports = function(){
         return this;
     };
 
+    this.setTemplateDir = function(tplDir)
+    {
+        this.tplDir = tplDir;
+        return this;
+    }
+
     this.setRequest = function(defaultPg)
     {
         var self = this;

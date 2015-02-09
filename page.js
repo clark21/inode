@@ -10,7 +10,7 @@ module.exports = function()
     this.display = function(path)
     {
         var self = this;
-        self.fs.readFile(path, 'utf8', function(err, data) {
+        self.fs.readFile(self.tplDir+path, 'utf8', function(err, data) {
             var ejs = require('ejs');
             var tpl = ejs.render(data, self.vars);
 
